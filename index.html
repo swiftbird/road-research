@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Shared Road Material Research — Class 6 vs Recycled Asphalt</title>
+<meta name="description" content="Research and decision memo for the Spring road resurfacing on our shared community road in rural Jefferson County, Colorado." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg: #faf7f2;
+  --bg-card: #ffffff;
+  --ink: #1f2421;
+  --ink-soft: #4a5350;
+  --accent: #2d5f3f;        /* forest green */
+  --accent-2: #b8651a;      /* clay */
+  --accent-3: #5a7a8c;      /* slate blue */
+  --warn: #b54a2c;
+  --good: #2d5f3f;
+  --neutral: #8a8478;
+  --border: #e6e0d4;
+  --shadow: 0 1px 2px rgba(31,36,33,.04), 0 4px 16px rgba(31,36,33,.06);
+  --maxw: 980px;
+}
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--ink);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+.serif { font-family: 'Source Serif 4', Georgia, serif; }
+header.hero {
+  background: linear-gradient(135deg, #2d5f3f 0%, #1e4530 100%);
+  color: #f8f5ee;
+  padding: 72px 24px 88px;
+  border-bottom: 4px solid #1e4530;
+  position: relative;
+  overflow: hidden;
+}
+header.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 80% 20%, rgba(255,255,255,.08) 0%, transparent 50%),
+                    radial-gradient(circle at 20% 80%, rgba(184,101,26,.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero-inner { max-width: var(--maxw); margin: 0 auto; position: relative; }
+.eyebrow {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.2);
+  padding: 6px 14px;
+  border-radius: 999px;
+  margin-bottom: 20px;
+}
+h1 {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(32px, 5vw, 48px);
+  line-height: 1.15;
+  margin: 0 0 16px;
+  letter-spacing: -0.02em;
+}
+.subtitle {
+  font-size: 19px;
+  font-weight: 400;
+  color: rgba(248,245,238,.85);
+  max-width: 680px;
+  margin: 0 0 28px;
+}
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+  font-size: 14px;
+  color: rgba(248,245,238,.75);
+}
+.meta strong { color: #f8f5ee; font-weight: 600; }
+main {
+  max-width: var(--maxw);
+  margin: -48px auto 80px;
+  padding: 0 24px;
+  position: relative;
+}
+.toc {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 28px;
+  box-shadow: var(--shadow);
+  margin-bottom: 40px;
+}
+.toc h3 { margin: 0 0 12px; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); font-weight: 700; }
+.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 32px; }
+.toc li { margin-bottom: 6px; break-inside: avoid; }
+.toc a { color: var(--ink); text-decoration: none; border-bottom: 1px dotted var(--neutral); padding-bottom: 1px; }
+.toc a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 36px 40px;
+  margin-bottom: 28px;
+  box-shadow: var(--shadow);
+}
+section h2 {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-weight: 600;
+  font-size: 28px;
+  margin: 0 0 8px;
+  color: var(--accent);
+  letter-spacing: -0.01em;
+}
+section h2 .num {
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  background: var(--accent);
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 6px;
+  vertical-align: middle;
+  margin-right: 12px;
+  letter-spacing: .05em;
+}
+section h3 {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-weight: 600;
+  font-size: 21px;
+  margin: 32px 0 10px;
+  color: var(--ink);
+}
+section h4 {
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--ink-soft);
+  margin: 24px 0 8px;
+}
+p { margin: 0 0 14px; }
+ul, ol { margin: 0 0 14px; padding-left: 22px; }
+li { margin-bottom: 6px; }
+strong { color: var(--ink); }
+em { color: var(--ink-soft); }
+blockquote {
+  border-left: 3px solid var(--accent-2);
+  background: #fdf6ec;
+  margin: 16px 0;
+  padding: 14px 20px;
+  font-style: italic;
+  color: var(--ink-soft);
+  border-radius: 0 6px 6px 0;
+}
+blockquote cite { display: block; margin-top: 8px; font-style: normal; font-size: 14px; color: var(--neutral); }
+.callout {
+  background: linear-gradient(135deg, #fdf6ec 0%, #faf2e0 100%);
+  border: 1px solid #ecd9b5;
+  border-left: 4px solid var(--accent-2);
+  border-radius: 8px;
+  padding: 18px 22px;
+  margin: 18px 0;
+}
+.callout strong { color: var(--accent-2); }
+.callout-green {
+  background: linear-gradient(135deg, #f0f7f1 0%, #e2f0e6 100%);
+  border: 1px solid #c5e0cc;
+  border-left: 4px solid var(--accent);
+}
+.callout-green strong { color: var(--accent); }
+
+/* Summary card grid */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin: 20px 0;
+}
+.kpi {
+  background: linear-gradient(180deg, #fafaf6 0%, #f5f1e8 100%);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+}
+.kpi .label { font-size: 12px; text-transform: uppercase; letter-spacing: .1em; color: var(--neutral); font-weight: 700; margin-bottom: 6px; }
+.kpi .value { font-family: 'Source Serif 4', Georgia, serif; font-size: 22px; font-weight: 600; color: var(--ink); line-height: 1.2; }
+.kpi.green { border-left: 4px solid var(--accent); }
+.kpi.clay { border-left: 4px solid var(--accent-2); }
+.kpi.slate { border-left: 4px solid var(--accent-3); }
+
+/* Comparison table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 18px 0;
+  font-size: 15px;
+}
+th, td {
+  text-align: left;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+th {
+  background: #f5f1e8;
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--ink-soft);
+}
+tr:last-child td { border-bottom: none; }
+.col-class6 { background: #f7faf7; }
+.col-rap { background: #fdf6ec; }
+.score {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  margin-right: 4px;
+  vertical-align: -2px;
+}
+.s-good { background: var(--good); }
+.s-mid { background: var(--accent-2); }
+.s-bad { background: var(--warn); }
+.dot-row { white-space: nowrap; }
+
+/* Charts */
+.chart-wrap {
+  background: #fafaf6;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+  margin: 18px 0;
+}
+.chart-wrap h4 { margin: 0 0 12px; }
+.chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+@media (max-width: 760px) { .chart-grid { grid-template-columns: 1fr; } .toc ol { columns: 1; } section { padding: 24px 22px; } }
+
+/* Source list */
+.sources {
+  font-size: 14px;
+  line-height: 1.55;
+}
+.sources li { margin-bottom: 10px; }
+.sources a { color: var(--accent-3); text-decoration: none; border-bottom: 1px solid #c8d4dc; }
+.sources a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 32px 24px 60px;
+  color: var(--neutral);
+  font-size: 14px;
+}
+footer strong { color: var(--ink); }
+
+a.inline { color: var(--accent-3); border-bottom: 1px solid #c8d4dc; text-decoration: none; }
+a.inline:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+.tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  padding: 3px 9px;
+  border-radius: 999px;
+  margin-right: 6px;
+  vertical-align: 2px;
+}
+.tag-class6 { background: #e2f0e6; color: var(--accent); }
+.tag-rap { background: #fdf6ec; color: var(--accent-2); }
+
+.print-link {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 18px;
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.3);
+  color: #f8f5ee;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.print-link:hover { background: rgba(255,255,255,.2); }
+
+@media print {
+  header.hero { background: #fff; color: #000; padding: 24px; }
+  .toc, .print-link { display: none; }
+  section { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+  body { background: #fff; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <span class="eyebrow">Research & Decision Memo</span>
+    <h1>Choosing the Right Surface for Our Shared Road</h1>
+    <p class="subtitle">A documented case for why <strong style="color:#fff">Class 6 Aggregate Base Course</strong> fits our road, our equipment, and our maintenance plan — prepared with sources and data so neighbors can read, question, and weigh in.</p>
+    <div class="meta">
+      <span><strong>Prepared by:</strong> Shaun Anderson & Trevor Ekstrom</span>
+      <span><strong>For:</strong> For the Grader Good, LLC</span>
+      <span><strong>Date:</strong> April 27, 2026</span>
+    </div>
+    <a href="#" class="print-link" onclick="window.print();return false;">⤓  Print / Save as PDF</a>
+  </div>
+</header>
+
+<main>
+
+<nav class="toc">
+  <h3>Contents</h3>
+  <ol>
+    <li><a href="#purpose">Purpose of this memo</a></li>
+    <li><a href="#tldr">Quick summary</a></li>
+    <li><a href="#background">Where the road is today</a></li>
+    <li><a href="#comparison">Material comparison</a></li>
+    <li><a href="#charts">Side-by-side scorecard</a></li>
+    <li><a href="#fit">Why Class 6 fits our situation</a></li>
+    <li><a href="#concerns">Addressing specific concerns</a></li>
+    <li><a href="#plan">Maintenance plan</a></li>
+    <li><a href="#sources">Sources & references</a></li>
+  </ol>
+</nav>
+
+<section id="purpose">
+  <h2><span class="num">01</span>Purpose of this memo</h2>
+  <p>This document records the research, reasoning, and decision-making behind our plan to use <strong>Class 6 Aggregate Base Course</strong> as the surface material for the upcoming Spring road work on our shared community road.</p>
+  <p>We want everyone in the community to be able to see clearly that:</p>
+  <ol>
+    <li>Both materials — Class 6 and recycled asphalt (RAP) — are <strong>legitimate, widely-used choices.</strong></li>
+    <li>Neither is universally right; each has documented trade-offs.</li>
+    <li>Our choice is grounded in (a) the <strong>specific current condition of our road</strong>, (b) the <strong>equipment we own</strong>, (c) the <strong>maintenance model we are committing to</strong>, and (d) <strong>published guidance</strong> from FHWA, CDOT, EPA, USDA, and industry sources.</li>
+    <li>We are committed to <strong>course-correcting</strong> if Class 6 underperforms our expectations.</li>
+  </ol>
+  <div class="callout callout-green">
+    <strong>This is not an argument that recycled asphalt is a bad material.</strong> It is a documented case for why Class 6 is the better fit <em>for our road, our equipment, and our maintenance plan, right now.</em>
+  </div>
+</section>
+
+<section id="tldr">
+  <h2><span class="num">02</span>Quick summary</h2>
+  <div class="summary-grid">
+    <div class="kpi green">
+      <div class="label">Material chosen</div>
+      <div class="value">Class 6 ABC</div>
+      <div style="font-size:13px;color:var(--neutral);margin-top:4px">CDOT spec, recycled concrete, sourced from Colorado Aggregate Recycling</div>
+    </div>
+    <div class="kpi clay">
+      <div class="label">Cost vs. RAP</div>
+      <div class="value">Equal $/ton</div>
+      <div style="font-size:13px;color:var(--neutral);margin-top:4px">~3× shorter trucking from CAR vs. APC</div>
+    </div>
+    <div class="kpi slate">
+      <div class="label">Equipment we own</div>
+      <div class="value">Grader + tractor</div>
+      <div style="font-size:13px;color:var(--neutral);margin-top:4px">No water truck, no roller-compactor</div>
+    </div>
+    <div class="kpi green">
+      <div class="label">Reversibility</div>
+      <div class="value">High</div>
+      <div style="font-size:13px;color:var(--neutral);margin-top:4px">Class 6 can be regraded, blended, or topped with RAP later</div>
+    </div>
+  </div>
+</section>
+
+<section id="background">
+  <h2><span class="num">03</span>Where the road is today</h2>
+  <p>For the last <strong>~8 years</strong> the shared road has been resurfaced with <span class="tag tag-rap">RAP</span> recycled asphalt. Before that, for <strong>~20+ years</strong>, it was <span class="tag tag-class6">Class 6</span> road base.</p>
+  <p>The current state of the road, after 3 years without new material:</p>
+  <ul>
+    <li><strong>Inconsistent surface.</strong> Large sections have hardened into asphalt-like crust, while adjacent sections remain soft, with potholes, washboarding, and ravel (loose flaking).</li>
+    <li><strong>Hard/soft transitions.</strong> The interfaces between hardened RAP and soft material are the worst-performing zones — they shear, pothole, and require disproportionate maintenance.</li>
+    <li><strong>Drainage issues.</strong> Berms blocking ditches in places; insufficient crown in others.</li>
+    <li><strong>Equipment limitation.</strong> Without a water truck and roller-compactor, we cannot replicate the original RAP installation conditions that made the hardened sections succeed.</li>
+  </ul>
+  <p>This condition was confirmed independently by <strong>Don Miller of Mountain Dirt Works, LLC</strong> (Estimate 25-56, August 2025), who walked the road for 3.5 hours and concluded that the hardened sections needed to be <strong>broken up before any new material is added</strong>, regardless of which material is chosen, because new material laid on top of the hard crust will erode and shear off rapidly.</p>
+  <div class="callout">
+    <strong>Key takeaway:</strong> The prep work (breaking up hard spots) is required either way. That work has been done. The remaining question is only: <em>what material goes back down on top?</em>
+  </div>
+</section>
+
+<section id="comparison">
+  <h2><span class="num">04</span>Material comparison</h2>
+
+  <h3>4.1 Class 6 Aggregate Base Course <span class="tag tag-class6">our choice</span></h3>
+  <p><strong>What it is:</strong> A blend of crushed rock (commonly recycled concrete in Colorado), gravel, sand, and fines, graded to CDOT specification. The material we are sourcing from <a class="inline" href="https://www.coloradoaggregaterecycling.com/class-6-road-base-explained/" target="_blank" rel="noopener">Colorado Aggregate Recycling</a> is 100% recycled concrete that meets CDOT Class 6 gradation requirements.</p>
+  <h4>Strengths</h4>
+  <ul>
+    <li><strong>Excellent compaction</strong> due to a well-graded mix of particle sizes from 3/4" down through fines.</li>
+    <li><strong>Easy to maintain.</strong> Per industry guidance and FHWA: easily regraded and re-compacted as needed.</li>
+    <li><strong>Standard for county roads.</strong> Jefferson County and most Colorado counties use Class 6 (or equivalent) for unpaved and base-course applications, per <a class="inline" href="https://www.codot.gov/business/designsupport/cdot-construction-specifications/2023-construction-specifications/2023-specs-book/2023-division-300" target="_blank" rel="noopener">CDOT 2023 Standard Specifications, Division 300</a>.</li>
+    <li><strong>Good drainage with controlled fines</strong> — the fines hold the road together while still allowing controlled drainage.</li>
+    <li><strong>Forgiving for owner-operators.</strong> Mistakes during grading can be corrected on the next pass — the material doesn’t “set” into something unfixable.</li>
+  </ul>
+  <h4>Weaknesses</h4>
+  <ul>
+    <li><strong>Dust</strong> can be higher than RAP in dry conditions. Mitigation: magnesium chloride dust palliative, the standard treatment used by Western counties.</li>
+    <li><strong>Plows can scrape it off</strong> more readily than hardened RAP, requiring periodic top-up.</li>
+    <li><strong>Slower snowmelt</strong> than dark RAP surface.</li>
+  </ul>
+
+  <h3>4.2 Recycled Asphalt Pavement (RAP / asphalt millings) <span class="tag tag-rap">considered</span></h3>
+  <p><strong>What it is:</strong> Old asphalt pavement that has been removed, ground up, and reprocessed. Contains residual asphalt binder plus original aggregate.</p>
+  <h4>Strengths</h4>
+  <ul>
+    <li><strong>Self-binding when conditions are right</strong> (warm weather, good compaction, even moisture).</li>
+    <li><strong>Faster snowmelt</strong> (dark surface absorbs solar heat).</li>
+    <li><strong>Lower dust</strong> once hardened.</li>
+    <li><strong>Resists plowing-off</strong> once cured.</li>
+  </ul>
+  <h4>Weaknesses (documented and observed on our road)</h4>
+  <ul>
+    <li><strong>Difficult to maintain.</strong> Per <a class="inline" href="https://www.ggservicessummit.com/post/class-6-road-base-or-recycled-asphalt" target="_blank" rel="noopener">G&G Services’ side-by-side comparison</a>: “More difficult to maintain once installed, as it forms a more solid and cohesive layer. <strong>It isn’t something that can be easily ripped up and regraded.</strong>”</li>
+    <li><strong>Inconsistent batches.</strong> Don Miller (Mountain Dirt Works) and multiple industry sources note that recycled asphalt is an inconsistent product because residual oil/binder content varies batch-to-batch.</li>
+    <li><strong>Requires water + compaction</strong> for proper installation. Without a water truck and roller, results are highly variable — exactly the situation we are in.</li>
+    <li><strong>Hard/soft transition problem</strong> — the issue our road currently exhibits.</li>
+    <li><strong>Pothole repair is harder.</strong> Cold-patching hardened RAP with new RAP is documented as one of the more difficult patching scenarios; specialized infrared patching or hot-mix is recommended (<a class="inline" href="https://www.njdottechtransfer.net/wp-content/uploads/2024/02/NJDOT_Pothole-Repair_Final-Report-Volume-I.pdf" target="_blank" rel="noopener">NJDOT pothole repair study</a>) — we have neither.</li>
+    <li><strong>Environmental considerations.</strong> Studies show low but non-zero leaching of PAHs (some EPA-listed probable human carcinogens) and metals from RAP, particularly in the first few years (<a class="inline" href="https://faculty.eng.ufl.edu/timothy-townsend/wp-content/uploads/sites/210/2022/06/A-critical-analysis-of-leaching-and-environmental-risk-assessment.pdf" target="_blank" rel="noopener">Univ. of Florida critical review</a>; <a class="inline" href="https://www.nj.gov/transportation/business/research/reports/FHWA-NJ-2017-008.pdf" target="_blank" rel="noopener">FHWA-NJ-2017-008</a>). Field levels are usually below EPA thresholds, but the concern is non-zero, especially for material in stormwater paths near homes and wells. Class 6 (recycled concrete) does not have this concern.</li>
+  </ul>
+
+  <h3>4.3 Cost</h3>
+  <p>At our local supplier, <strong>Colorado Aggregate Recycling</strong> (near the Jefferson County landfill), Class 6 and recycled asphalt are <strong>priced identically per ton</strong>. Trucking distance from CAR is also approximately <strong>one-third</strong> of the trucking distance from APC (the supplier originally proposed for RAP), so total delivered cost favors Class 6 from CAR.</p>
+</section>
+
+<section id="charts">
+  <h2><span class="num">05</span>Side-by-side scorecard</h2>
+  <p>The chart below scores each material on the criteria most relevant <em>to our specific situation</em> — owned equipment, no compaction infrastructure, new operators, current alternating hard/soft surface. Higher is better.</p>
+
+  <div class="chart-wrap">
+    <h4>How each material scores against our specific constraints</h4>
+    <div style="position:relative;height:420px">
+      <canvas id="radarChart"></canvas>
+    </div>
+    <p style="font-size:13px;color:var(--neutral);margin-top:12px;margin-bottom:0">Scores are our assessment based on FHWA, CDOT, G&G Services, EPA, and contractor input. “Maintainability with our equipment” and “Forgives operator error” are the two largest swing factors and the largest gap between materials.</p>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <h4>Equipment & infrastructure required</h4>
+      <div style="position:relative;height:300px">
+        <canvas id="equipChart"></canvas>
+      </div>
+    </div>
+    <div class="chart-wrap">
+      <h4>Per-ton material cost (delivered, our supplier)</h4>
+      <div style="position:relative;height:300px">
+        <canvas id="costChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <h3>5.1 Direct comparison table</h3>
+  <table>
+    <thead>
+      <tr><th style="width:32%">Criterion</th><th class="col-class6">Class 6 Aggregate</th><th class="col-rap">Recycled Asphalt (RAP)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Compaction with traffic + rain</strong></td><td class="col-class6"><span class="score s-good"></span> Good — well-graded fines</td><td class="col-rap"><span class="score s-mid"></span> Variable — needs roller for best results</td></tr>
+      <tr><td><strong>Maintainability without specialized equipment</strong></td><td class="col-class6"><span class="score s-good"></span> High — regrades easily</td><td class="col-rap"><span class="score s-bad"></span> Low once cured — “can’t be easily ripped up and regraded”</td></tr>
+      <tr><td><strong>Forgiveness of operator error</strong></td><td class="col-class6"><span class="score s-good"></span> High</td><td class="col-rap"><span class="score s-bad"></span> Low — sets quickly in heat</td></tr>
+      <tr><td><strong>Spot-fix potholes with our equipment</strong></td><td class="col-class6"><span class="score s-good"></span> Easy</td><td class="col-rap"><span class="score s-bad"></span> Difficult; whack-a-mole pattern</td></tr>
+      <tr><td><strong>Crown re-establishment</strong></td><td class="col-class6"><span class="score s-good"></span> Easy</td><td class="col-rap"><span class="score s-mid"></span> Hard once hardened</td></tr>
+      <tr><td><strong>Snowmelt speed</strong></td><td class="col-class6"><span class="score s-mid"></span> Slower (light surface)</td><td class="col-rap"><span class="score s-good"></span> Faster (dark surface)</td></tr>
+      <tr><td><strong>Resists plowing-off</strong></td><td class="col-class6"><span class="score s-mid"></span> Some loss expected</td><td class="col-rap"><span class="score s-good"></span> Strong once cured</td></tr>
+      <tr><td><strong>Dust in dry weather</strong></td><td class="col-class6"><span class="score s-mid"></span> Higher (mitigatable w/ MgCl₂)</td><td class="col-rap"><span class="score s-good"></span> Lower</td></tr>
+      <tr><td><strong>Environmental risk (PAH leaching, etc.)</strong></td><td class="col-class6"><span class="score s-good"></span> Negligible (recycled concrete)</td><td class="col-rap"><span class="score s-mid"></span> Low but non-zero, well-studied</td></tr>
+      <tr><td><strong>Cost per ton (delivered)</strong></td><td class="col-class6"><span class="score s-good"></span> Equal</td><td class="col-rap"><span class="score s-mid"></span> Equal at CAR; higher at APC due to trucking</td></tr>
+      <tr><td><strong>Reversibility / option to switch later</strong></td><td class="col-class6"><span class="score s-good"></span> High — can be topped with RAP later</td><td class="col-rap"><span class="score s-bad"></span> Low — must break up to switch back</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="fit">
+  <h2><span class="num">06</span>Why Class 6 fits our situation</h2>
+  <p>The published comparison shows both materials work in different contexts. Here is why <em>our</em> specific context favors Class 6:</p>
+
+  <h3>6.1 We own the equipment for frequent, light maintenance</h3>
+  <p>Our toolbox:</p>
+  <ul>
+    <li>A motor grader (the former Rapp grader, now <em>For the Grader Good, LLC</em>)</li>
+    <li>Shaun’s tractor with bucket, back blade, and box blade with tines</li>
+    <li>Lee’s bobcat available on a neighborly basis</li>
+  </ul>
+  <p>This equipment set is <strong>ideal for the Class 6 maintenance model</strong>: frequent, light grading after rains and shoulder seasons, periodic blading to redistribute material from edges back to the crown, and occasional top-ups.</p>
+  <p>It is <strong>not ideal for the RAP maintenance model</strong>, which depends on:</p>
+  <ul>
+    <li>A water truck (we don’t have one; per Mountain Dirt Works, sourcing water at scale is prohibitively expensive due to Colorado water rights)</li>
+    <li>A heavy roller-compactor (we don’t have one)</li>
+    <li>Carefully timed installation around weather windows</li>
+    <li>Specialized cold/hot-mix patching for failures</li>
+  </ul>
+  <p>Using the equipment we actually have to maintain the material best suited to that equipment is sound asset management.</p>
+
+  <h3>6.2 The road currently shows the failure mode of un-maintained RAP</h3>
+  <p>The alternating hard/soft sections we have now are the <em>exact</em> failure mode the industry literature warns about for under-maintained RAP without proper compaction infrastructure. Replacing it with more RAP — without adding a water truck and roller — is likely to recreate the same problem in a few years.</p>
+
+  <h3>6.3 Class 6 lowers the consequence of operator error</h3>
+  <p>We are new to operating the grader. Industry guidance (<a class="inline" href="https://www.fhwa.dot.gov/construction/pubs/ots15002.pdf" target="_blank" rel="noopener">FHWA <em>Gravel Roads</em> Guide</a>) is consistent: a learning curve is expected, and <strong>the ability to correct mistakes on the next grading pass is essential.</strong> Class 6 supports this; RAP, once it sets, does not.</p>
+  <blockquote>
+    “We are going to miss [Phil’s] skill on that grader for a little bit while the new owners get their skills up to speed.”
+    <cite>— Lee Bagby, community email, Oct 28, 2025</cite>
+  </blockquote>
+  <p>The material we put down should be forgiving while we develop those skills.</p>
+
+  <h3>6.4 Crown and drainage repair are easier in Class 6</h3>
+  <p>FHWA recommends a ~4% crown for gravel roads. Re-establishing crown on a road with hardened RAP sections is materially harder than re-establishing crown in fresh, gradable Class 6. Crown and ditch maintenance are the two largest contributors to road damage on rural gravel roads (FHWA <em>Gravel Roads</em> Guide, Section 5). Class 6 makes both easier.</p>
+
+  <h3>6.5 Reversibility</h3>
+  <p>If, after a season or two, Class 6 underperforms our expectations, <strong>we can grade it, top it, or switch back to RAP</strong> without major loss of investment. The reverse — switching off RAP back to Class 6 — is what we are doing right now, and it required breaking up the hard crust first, at significant labor cost.</p>
+  <div class="callout callout-green">
+    <strong>Choosing the more reversible option during a transition period is good risk management.</strong> Engineers call this preserving optionality.
+  </div>
+</section>
+
+<section id="concerns">
+  <h2><span class="num">07</span>Addressing specific concerns</h2>
+
+  <h3>7.1 “We’ve grown the hardened areas successfully — why change?”</h3>
+  <p>We respect this experience and acknowledge that, with a skilled operator (Phil) and well-timed material deliveries, RAP did harden in many places over the years. However:</p>
+  <ul>
+    <li>The road has degraded over the last 3 years without input. The current alternating hard/soft pattern is hard to maintain with our equipment set.</li>
+    <li>Industry literature explicitly warns about this maintenance approach with hardened RAP. Per the <a class="inline" href="https://www.ggservicessummit.com/post/class-6-road-base-or-recycled-asphalt" target="_blank" rel="noopener">G&G Services side-by-side comparison</a>: hardened RAP “isn’t something that can be easily ripped up and regraded” — spot-fixing the soft transitions next to hardened areas tends to become a recurring whack-a-mole pattern rather than a one-time fix.</li>
+    <li>Two long-tenured caretakers of this road hold differing views on whether RAP is the long-term right call. This is a legitimate disagreement among experienced people, not a settled question.</li>
+  </ul>
+
+  <h3>7.2 “Class 6 has more dust”</h3>
+  <p>True, in dry conditions. Standard mitigation: <a class="inline" href="https://www.fs.usda.gov/t-d/pubs/pdf/99771207.pdf" target="_blank" rel="noopener">magnesium chloride dust palliative</a>, applied 1–2× per year, used by virtually every Western county on gravel roads (<a class="inline" href="https://www.fhwa.dot.gov/clas/ctip/unpaved_roads_dust/ch_5.aspx" target="_blank" rel="noopener">FHWA Unpaved Road Dust Management</a>). We can budget for this if/when dust becomes an issue, well within historical road-spend levels.</p>
+
+  <h3>7.3 “Class 6 needs to be re-upped every year”</h3>
+  <p>Partially true — some top-up is normal for Class 6 because plows scrape some off and traffic redistributes it. But:</p>
+  <ul>
+    <li>Material costs are equal per ton.</li>
+    <li>We can place top-ups strategically (potholes, low spots) rather than full resurfacing — the same approach Lee suggested for RAP.</li>
+    <li>This community successfully used exactly this approach — strategic top-ups on Class 6 — for the ~20+ years before the switch to recycled asphalt. (Long-tenured neighbors can confirm or correct this history.)</li>
+  </ul>
+
+  <h3>7.4 “You said you can’t compact properly without a roller”</h3>
+  <p>Correct, and this applies to <strong>both</strong> materials. Per FHWA, natural compaction by traffic + well-timed rain events is how most county gravel roads compact — and it works for Class 6. That’s the same model used on this road for the ~20+ years of Class 6 history before the switch to RAP. Class 6 is <strong>more forgiving</strong> of imperfect compaction than RAP, because un-fully-compacted Class 6 still grades smoothly; un-fully-compacted RAP ravels and creates the hard/soft problem.</p>
+</section>
+
+<section id="plan">
+  <h2><span class="num">08</span>Maintenance plan going forward</h2>
+  <p>We are committing to a <strong>more frequent, lighter-touch maintenance schedule</strong> than the road has received in recent years.</p>
+  <div class="chart-wrap">
+    <h4>Annual cadence</h4>
+    <div style="position:relative;height:340px">
+      <canvas id="calendarChart"></canvas>
+    </div>
+  </div>
+  <ol>
+    <li><strong>Spring</strong> (after snowmelt / mud season ends): full grading pass, crown re-establishment, ditch/shoulder check, material top-ups where needed.</li>
+    <li><strong>Early Summer:</strong> light grading, dust palliative if needed.</li>
+    <li><strong>After significant rain events:</strong> spot grading on potholes and washboard before they grow.</li>
+    <li><strong>Fall</strong> (before plowing season): final smooth, ditch clearing, prep for snow.</li>
+    <li><strong>As-needed:</strong> pothole spot-fixes — easier with Class 6.</li>
+  </ol>
+  <p>This schedule leverages the fact that we own the equipment and live on the road. The marginal cost of “another pass with the grader” is fuel + an hour or two of our time, which is <strong>not billed to the community</strong> per our community agreement.</p>
+</section>
+
+<section id="sources">
+  <h2><span class="num">09</span>Sources & references</h2>
+  <p>All links open in a new tab.</p>
+  <ol class="sources">
+    <li><a href="https://www.coloradoaggregaterecycling.com/class-6-road-base-explained/" target="_blank" rel="noopener">Colorado Aggregate Recycling — Class 6 Road Base Explained</a> — our local supplier; describes their CDOT-conforming product.</li>
+    <li><a href="https://www.coloradoaggregaterecycling.com/wp-content/uploads/2022/02/Class-6-Road-Base-01-20-22-Golden.pdf" target="_blank" rel="noopener">Colorado Aggregate Recycling — CDOT Class 6 conformance test report (PDF, 2022)</a></li>
+    <li><a href="https://www.ggservicessummit.com/post/class-6-road-base-or-recycled-asphalt" target="_blank" rel="noopener">G&G Services — Comparing Class 6 Road Base and Recycled Asphalt (May 2024)</a> — primary side-by-side industry comparison.</li>
+    <li><a href="https://www.fhwa.dot.gov/construction/pubs/ots15002.pdf" target="_blank" rel="noopener">Federal Highway Administration / SD LTAP — Gravel Roads Construction and Maintenance Guide (FHWA-OTS-15-002)</a> — the standard U.S. reference for gravel road maintenance.</li>
+    <li><a href="https://www.codot.gov/business/designsupport/cdot-construction-specifications/2023-construction-specifications/2023-specs-book/2023-division-300" target="_blank" rel="noopener">CDOT Standard Specifications for Road and Bridge Construction (2023), Division 300 — Aggregate Base Course</a></li>
+    <li><a href="https://www.jeffco.us/2632/Transportation-Design-Construction-Manua" target="_blank" rel="noopener">Jefferson County Transportation Design & Construction Manual</a> — references CDOT specs for road base.</li>
+    <li><a href="https://www.epa.gov/sites/default/files/2015-10/documents/2003_07_24_nps_gravelroads_sec4_0.pdf" target="_blank" rel="noopener">EPA — Gravel Roads: Dust Control and Stabilization (PDF)</a></li>
+    <li><a href="https://www.fs.usda.gov/t-d/pubs/pdf/99771207.pdf" target="_blank" rel="noopener">USDA Forest Service — Dust Palliative Selection and Application Guide (PDF)</a></li>
+    <li><a href="https://www.fhwa.dot.gov/clas/ctip/unpaved_roads_dust/ch_5.aspx" target="_blank" rel="noopener">FHWA — Unpaved Road Dust Management: A Successful Practitioner’s Handbook</a></li>
+    <li><strong>Mountain Dirt Works, LLC — site walk and verbal report</strong> (Don Miller, Aug 2025). Estimate 25-56. Direct quote on RAP batch inconsistency.</li>
+    <li><a href="https://greenfieldpavement.com/performance-of-recycled-asphalt-in-various-weather-conditions/" target="_blank" rel="noopener">Greenfield Pavement — Performance of Recycled Asphalt in Various Weather Conditions (Jul 2024)</a></li>
+    <li><a href="https://www.njdottechtransfer.net/wp-content/uploads/2024/02/NJDOT_Pothole-Repair_Final-Report-Volume-I.pdf" target="_blank" rel="noopener">NJDOT — Innovative Pothole Repair Materials and Techniques (PDF)</a></li>
+    <li><a href="https://faculty.eng.ufl.edu/timothy-townsend/wp-content/uploads/sites/210/2022/06/A-critical-analysis-of-leaching-and-environmental-risk-assessment.pdf" target="_blank" rel="noopener">Townsend et al. — A critical analysis of leaching and environmental risk assessment of reclaimed asphalt pavement (Univ. of Florida, PDF)</a></li>
+    <li><a href="https://www.nj.gov/transportation/business/research/reports/FHWA-NJ-2017-008.pdf" target="_blank" rel="noopener">NJDOT / FHWA-NJ-2017-008 — Environmental Impacts of Reclaimed Asphalt Pavement (PDF)</a></li>
+    <li><a href="https://www.khplant.co.za/blog/building-great-gravel-road-10-basic-principles/" target="_blank" rel="noopener">KH Plant — Building a Great Gravel Road: 10 Basic Principles</a></li>
+    <li><a href="https://onlinepubs.trb.org/onlinepubs/webinars/120410.pdf" target="_blank" rel="noopener">TRB Webinar — Gravel Roads Design and Maintenance (PDF, slides)</a></li>
+  </ol>
+</section>
+
+<section style="background:linear-gradient(135deg,#2d5f3f 0%,#1e4530 100%);color:#f8f5ee;border:none">
+  <h2 style="color:#fff"><span class="num" style="background:#fff;color:var(--accent)">10</span>Closing note</h2>
+  <p style="color:rgba(248,245,238,.92)">We genuinely welcome continued input — including disagreement — from neighbors who have lived with and worked on this road longer than we have. The choice between Class 6 and RAP is not a moral question and it is not an engineering certainty. It is a judgment call about fit between material, equipment, operator skill, and maintenance cadence.</p>
+  <p style="color:rgba(248,245,238,.92)">We have made our judgment call, documented above, and we are committed to:</p>
+  <ul style="color:rgba(248,245,238,.92)">
+    <li>Doing the work ourselves at no labor cost to the community.</li>
+    <li>Using our own equipment.</li>
+    <li>Owning any mistakes and fixing them at our own time.</li>
+    <li>Reporting back honestly on how Class 6 performs through the first season and reconsidering openly if it underperforms.</li>
+  </ul>
+  <p style="color:rgba(248,245,238,.92)">Thanks for reading. Onward.</p>
+  <p class="serif" style="font-size:18px;color:#fff;margin-top:18px">— Shaun & Trevor<br><em style="color:rgba(248,245,238,.7);font-size:15px">For the Grader Good, LLC</em></p>
+</section>
+
+</main>
+
+<footer>
+  <p>Compiled from email correspondence, contractor input, and public technical literature.<br>
+  <strong>For the Grader Good, LLC</strong> · Jefferson County, Colorado</p>
+</footer>
+
+<script>
+const commonOpts = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: { position: 'top', labels: { font: { family: 'Inter', size: 13 }, color: '#1f2421' } },
+    tooltip: { titleFont: { family: 'Inter' }, bodyFont: { family: 'Inter' } }
+  }
+};
+
+// Radar chart
+const radarCtx = document.getElementById('radarChart').getContext('2d');
+new Chart(radarCtx, {
+  type: 'radar',
+  data: {
+    labels: [
+      'Maintainability with our equipment',
+      'Forgives operator error',
+      'Spot-fix potholes easily',
+      'Crown / drainage rebuild',
+      'Reversibility (option to switch)',
+      'Snowmelt speed',
+      'Resists plowing-off',
+      'Low dust in dry weather'
+    ],
+    datasets: [
+      {
+        label: 'Class 6 Aggregate',
+        data: [9, 9, 9, 9, 9, 5, 5, 5],
+        backgroundColor: 'rgba(45, 95, 63, 0.18)',
+        borderColor: '#2d5f3f',
+        borderWidth: 2,
+        pointBackgroundColor: '#2d5f3f',
+        pointRadius: 4
+      },
+      {
+        label: 'Recycled Asphalt (RAP)',
+        data: [3, 3, 3, 4, 2, 8, 8, 8],
+        backgroundColor: 'rgba(184, 101, 26, 0.18)',
+        borderColor: '#b8651a',
+        borderWidth: 2,
+        pointBackgroundColor: '#b8651a',
+        pointRadius: 4
+      }
+    ]
+  },
+  options: {
+    ...commonOpts,
+    scales: {
+      r: {
+        suggestedMin: 0,
+        suggestedMax: 10,
+        ticks: { stepSize: 2, color: '#8a8478', backdropColor: 'transparent' },
+        grid: { color: '#e6e0d4' },
+        angleLines: { color: '#e6e0d4' },
+        pointLabels: { font: { family: 'Inter', size: 12, weight: '500' }, color: '#1f2421' }
+      }
+    }
+  }
+});
+
+// Equipment chart
+const equipCtx = document.getElementById('equipChart').getContext('2d');
+new Chart(equipCtx, {
+  type: 'bar',
+  data: {
+    labels: ['Motor grader', 'Tractor + back blade', 'Bobcat (loaner)', 'Water truck', 'Roller-compactor', 'Hot/IR patcher'],
+    datasets: [
+      {
+        label: 'Class 6 needs',
+        data: [1, 1, 1, 0, 0, 0],
+        backgroundColor: '#2d5f3f'
+      },
+      {
+        label: 'RAP needs (best results)',
+        data: [1, 1, 1, 1, 1, 1],
+        backgroundColor: '#b8651a'
+      },
+      {
+        label: 'We currently own',
+        data: [1, 1, 1, 0, 0, 0],
+        backgroundColor: '#5a7a8c'
+      }
+    ]
+  },
+  options: {
+    ...commonOpts,
+    indexAxis: 'y',
+    scales: {
+      x: { display: false, max: 1.2 },
+      y: { ticks: { font: { family: 'Inter', size: 12 }, color: '#1f2421' }, grid: { display: false } }
+    },
+    plugins: {
+      ...commonOpts.plugins,
+      tooltip: {
+        callbacks: {
+          label: (ctx) => `${ctx.dataset.label}: ${ctx.raw ? 'Yes' : 'No'}`
+        }
+      }
+    }
+  }
+});
+
+// Cost chart
+const costCtx = document.getElementById('costChart').getContext('2d');
+new Chart(costCtx, {
+  type: 'bar',
+  data: {
+    labels: ['Class 6\n(Colorado Aggregate Recycling)', 'RAP\n(Colorado Aggregate Recycling)', 'RAP\n(APC — originally proposed)'],
+    datasets: [{
+      label: 'Relative delivered cost per ton',
+      data: [100, 100, 135],
+      backgroundColor: ['#2d5f3f', '#b8651a', '#b54a2c'],
+      borderRadius: 6
+    }]
+  },
+  options: {
+    ...commonOpts,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: (ctx) => `Index: ${ctx.raw} (lower = cheaper)` } }
+    },
+    scales: {
+      y: { beginAtZero: true, ticks: { color: '#8a8478', font: { family: 'Inter' } }, grid: { color: '#f0ebe0' }, title: { display: true, text: 'Cost index (CAR Class 6 = 100)', color: '#4a5350', font: { family: 'Inter', size: 12 } } },
+      x: { ticks: { color: '#1f2421', font: { family: 'Inter', size: 11 } }, grid: { display: false } }
+    }
+  }
+});
+
+// Calendar chart
+const calCtx = document.getElementById('calendarChart').getContext('2d');
+new Chart(calCtx, {
+  type: 'bar',
+  data: {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    datasets: [
+      { label: 'Full grading pass',           data: [0,0,0,0,3,0,0,0,0,3,0,0], backgroundColor: '#2d5f3f' },
+      { label: 'Light grading / spot fixes',  data: [0,0,0,0,1,2,2,2,2,1,0,0], backgroundColor: '#5a7a8c' },
+      { label: 'Dust palliative (if needed)', data: [0,0,0,0,0,2,0,0,0,0,0,0], backgroundColor: '#b8651a' },
+      { label: 'Material top-up',             data: [0,0,0,0,2,0,0,0,2,0,0,0], backgroundColor: '#a39674' }
+    ]
+  },
+  options: {
+    ...commonOpts,
+    scales: {
+      x: { stacked: true, ticks: { color: '#1f2421', font: { family: 'Inter' } }, grid: { display: false } },
+      y: { stacked: true, beginAtZero: true, ticks: { color: '#8a8478', font: { family: 'Inter' } }, grid: { color: '#f0ebe0' }, title: { display: true, text: 'Activity intensity', color: '#4a5350', font: { family: 'Inter', size: 12 } } }
+    }
+  }
+});
+</script>
+
+</body>
+</html>
